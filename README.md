@@ -2,10 +2,10 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.png">
-  <img src="docs/logo-light.png" alt="" width="104">
+  <img src="docs/logo-light.png" alt="ZStats" width="96">
 </picture>
 
-<h3>AirStats</h3>
+<h3>ZStats</h3>
 
 An ultra lightweight macOS system monitor.
 
@@ -13,84 +13,85 @@ An ultra lightweight macOS system monitor.
 
 </div>
 
-AirStats is a system monitor for the Mac menu bar. It reads CPU, memory, GPU, network,
-disk, battery, temperature, process and host statistics from the kernel and shows them in
-three places: the menu bar itself, a panel that drops down when you click the status item,
-and a desktop widget you can leave on screen.
+**ZStats** is a lightweight, privacy-first system monitor for the Mac menu bar. It reads CPU, memory, GPU, network, disk, battery, Bluetooth peripherals, temperature, fan speeds, top processes, and host statistics directly from macOS system frameworks and displays them across three surfaces:
 
-It is built to be genuinely light. A menu bar monitor runs all day, every day, so AirStats
-holds a few megabytes and a fraction of a percent of one core rather than the tens of
-megabytes its peers take. It has no Dock icon, and reads the system through Mach, IOKit,
-sysctl and CoreWLAN.
+- **Menu bar** — combined or separate draggable status items, compact icon titles, stacked upload/download network rates, graphs, bars, and per-device Bluetooth battery readouts.
+- **Click-down panel** — non-activating popover with accordion modules, live sparklines, and 24-hour history bands (with Liquid Glass on macOS 26+).
+- **Desktop widget** — configurable floating or desktop-pinned telemetry card.
+
+ZStats runs all day in a few megabytes of RAM and a fraction of a percent of one CPU core, with **zero third-party dependencies** and **no background auto-update checks**. Nothing ever leaves your Mac unless you explicitly turn on public IP lookup in Settings.
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/panel-dark.png">
+  <img src="docs/panel-light.png" alt="ZStats Panel" width="380">
+</picture>
+
+<br><br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/settings-dark.png">
+  <img src="docs/settings-light.png" alt="ZStats Settings" width="680">
+</picture>
+
+</div>
+
+## Highlights
+
+- **Low overhead by construction** — reads directly from Mach, IOKit, `sysctl`, CoreWLAN, and IOBluetooth; collectors with no visible consumer or active alert rule stay suspended, and sampling pauses automatically when displays sleep or the screen locks.
+- **Bluetooth peripheral tracking** — monitors connected Bluetooth headphones, mice, keyboards, trackpads, and gamepads, with support for pinning individual devices to dedicated menu bar battery readouts.
+- **Bilingual UI** — switch live between **English** and **Tiếng Việt** (or follow macOS system language).
+- **Threshold notifications & global shortcuts** — configurable sustained-duration alerts, custom metric palettes, and JSON settings import/export.
+- **No telemetry or upstream updater** — self-contained universal binary (`arm64` + `x86_64`) with no background network polling.
 
 ## Requirements
 
-- macOS 14 or later
-- Intel or Apple silicon
+- macOS 14 (Sonoma) or later
+- Apple silicon (`arm64`) or Intel (`x86_64`)
 
-## Install
+## Build & Install
 
-Download it from [airstats.app](https://airstats.app), open the dmg and drag the app to
-Applications. The release includes both Intel (`x86_64`) and Apple silicon (`arm64`)
-builds in one app. It is signed and notarized, so it opens with no warning.
-
-Or with Homebrew:
-
-```sh
-brew install --cask airstats
-```
-
-AirStats updates itself with [Sparkle](https://sparkle-project.org). It asks airstats.app
-once a week whether a newer version exists, and installs one only when you say so. Both of
-those can be turned off in General settings.
-
-## Build from source
-
-The universal build has been verified with Xcode 27 on Apple silicon. Older Xcode and
-macOS build environments may work, but have not been verified. The macOS 26 SDK enables
-Liquid Glass; builds with an earlier SDK use AirStats' existing material and sheen fallback.
+Clone the repository and build the universal `.app` bundle from source:
 
 ```sh
 Scripts/build.sh release
-cp -R .build/release/AirStats.app /Applications/
-open /Applications/AirStats.app
+cp -R .build/release/ZStats.app /Applications/
+open /Applications/ZStats.app
 ```
 
-`Scripts/build.sh` builds both architectures, wraps them in one universal `.app` bundle,
-copies `Sparkle.framework` into `Contents/Frameworks`, and signs it ad hoc. macOS grants a
-status item only to a signed bundle with `LSUIElement` set. Run the script with no
-argument for a debug build.
+`Scripts/build.sh` compiles both Apple silicon (`arm64`) and Intel (`x86_64`) slices, merges them into a single universal `ZStats.app` bundle, copies resources, and applies an ad-hoc signature so macOS grants menu bar status item privileges. Run `Scripts/build.sh` with no arguments for a debug bundle.
 
-An ad-hoc signature is enough to run a build you made yourself, and not enough to travel:
-macOS refuses an ad-hoc bundle that arrived over the internet. `Scripts/release.sh` is what
-produces the download above, signing with a Developer ID certificate and stapling Apple's
-notarization ticket to the `.dmg`.
+> **Upgrading from AirStats:** On first launch, ZStats automatically migrates any existing configuration and 24-hour chart history from `~/Library/Application Support/AirStats` into `~/Library/Application Support/ZStats` without modifying the old folder.
 
-## Source layout
+## CLI Diagnostics & Offscreen Rendering
 
-| Path | What lives there |
+The `ZStats` binary includes windowless verification modes that run over SSH or in CI without a display:
+
+```sh
+.build/debug/ZStats --probe                             # sample all collectors and print readings
+.build/debug/ZStats --probe cpu bluetooth               # sample specific collectors
+.build/debug/ZStats --render --out ./render             # render menuBar, panel, desktopWidget, and settings PNGs
+.build/debug/ZStats --render settings --lang vietnamese # render in Vietnamese
+```
+
+## Source Layout
+
+| Path | Description |
 | --- | --- |
-| `Sources/AirStatKit` | Collectors, the sampling engine, settings, formatting. No UI. |
-| `Sources/AirStatUI` | Menu bar drawing, panel, desktop widget, settings window, charts, design system. |
-| `Sources/AirStats` | The executable, app delegate, and the probe and render commands. |
-| `Tests/AirStatKitTests` | Contract tests for the collectors, plus settings and formatting. |
-| `Scripts/build.sh` | Builds the binary and assembles the `.app`. |
-| `Scripts/release.sh` | Signs, notarizes and packages the `.dmg` that ships. |
-| `Scripts/appcast.py` | Writes a release into the appcast Sparkle reads. |
-| `Scripts/benchmark.py` | Samples the menu bar monitors on your Mac over one shared window. |
+| `Sources/ZStatKit` | Collectors, sampling engine, history rings, localization, settings, and formatting. No UI imports. |
+| `Sources/ZStatUI` | Menu bar drawing, click-down panel, desktop widget, settings window, charts, and design system. |
+| `Sources/ZStats` | Executable entry point, app coordinator, `--probe` diagnostics CLI, and `--render` CLI. |
+| `Tests/ZStatKitTests` | Collector contract tests, settings fault-tolerance tests, layout tests, and performance budgets. |
+| `Scripts/build.sh` | Builds both CPU slices and assembles the universal `ZStats.app` bundle. |
+| `Scripts/release.sh` | Signs, notarizes, and packages `ZStats.dmg` for distribution. |
+| `Scripts/benchmark.py` | Measures live CPU and memory overhead against other running menu bar monitors. |
 
-`AirStatKit` never imports SwiftUI or AppKit, which is what lets the tests and the probe
-run in a windowless process.
+`ZStatKit` never imports SwiftUI or AppKit, keeping core collectors and unit tests fast and windowless.
 
 ## Contributing
 
-[CONTRIBUTING.md](CONTRIBUTING.md) has the checks to run before a pull request and the
-house rules.
-
-## Contact
-
-Bugs and feature requests go on the [issue tracker](https://github.com/byrencheema/airstats/issues).
-For anything private, email [hello@airstats.app](mailto:hello@airstats.app).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for verification commands and codebase conventions.
 
 ## License
 

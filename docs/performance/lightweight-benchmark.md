@@ -1,6 +1,6 @@
 # Lightweight benchmark
 
-This is a repeatable collector-cost check for changes that affect AirStats' core
+This is a repeatable collector-cost check for changes that affect ZStats' core
 promise of being lightweight. It exercises the shipped `--probe` entry point in a
 release build, rather than a synthetic loop. Each scenario launches the executable
 five times; each launch takes three samples at 0.20 seconds. The harness reports
@@ -12,7 +12,7 @@ claims. Use `python3 Scripts/benchmark-lightweight.py --help` for options.
 The longer comparison was run with:
 
 ```sh
-python3 Scripts/benchmark-lightweight.py --executable <release-app>/Contents/MacOS/AirStats \
+python3 Scripts/benchmark-lightweight.py --executable <release-app>/Contents/MacOS/ZStats \
   --runs 3 --repeat 31 --interval 1 --json <results>.json
 ```
 
@@ -34,7 +34,7 @@ are preserved at `/tmp/airstats-baseline-20260911` for this review.
 
 The baseline release Performance suite also passed all 19 tests. A prior full local
 test run had one pre-existing live fan minimum failure in
-`Tests/AirStatKitTests/CollectorContractTests.swift`; the suite is hardware-sensitive.
+`Tests/ZStatKitTests/CollectorContractTests.swift`; the suite is hardware-sensitive.
 
 For a longer collector-only run, the same scenarios used three launches with 31
 samples at a one-second interval (30 seconds of sampling per launch). This removes

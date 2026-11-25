@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["pillow"]
+# ///
 """Draws the backdrop the .dmg window shows behind the app and the Applications alias.
 
 Finder places the two icons on top of this image at the coordinates in dmg.py, so the
@@ -51,7 +55,7 @@ def draw(scale):
     img = Image.new("RGB", (W * scale, H * scale), PAPER)
     d = ImageDraw.Draw(img)
 
-    centred(d, "Drag AirStats into Applications", 56 * scale, font(20 * scale, index=1), INK, 1)
+    centred(d, "Drag ZStats into Applications", 56 * scale, font(20 * scale, index=1), INK, 1)
     centred(d, "Then eject this disk image", 88 * scale, font(13 * scale), INK_3, 1)
 
     # The arrow spans the gap between the two icon slots. 128px icons are drawn

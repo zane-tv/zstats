@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare AirStats collector work before and after a change.
+"""Compare ZStats collector work before and after a change.
 
 This harness deliberately measures the public ``--probe`` path rather than a
 synthetic loop. Each scenario starts the specified executable, samples the same
@@ -9,9 +9,9 @@ Monitor: process startup and the host's current load are part of every result.
 
 Examples:
     python3 Scripts/benchmark-lightweight.py \
-      --executable /tmp/airstats-baseline/.../AirStats
+      --executable /tmp/zstats-baseline/.../ZStats
     python3 Scripts/benchmark-lightweight.py \
-      --executable .build/release/AirStats --json after.json
+      --executable .build/release/ZStats --json after.json
 """
 
 from __future__ import annotations
@@ -80,7 +80,7 @@ def summarize(samples: list[dict[str, float]]) -> dict[str, float]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--executable", required=True, help="AirStats executable to measure")
+    parser.add_argument("--executable", required=True, help="ZStats executable to measure")
     parser.add_argument("--runs", type=int, default=5, help="measured launches per scenario")
     parser.add_argument("--repeat", type=int, default=3, help="probe samples per launch")
     parser.add_argument("--interval", type=float, default=0.2, help="seconds between probe samples")

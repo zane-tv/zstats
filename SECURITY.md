@@ -2,21 +2,17 @@
 
 ## Supported versions
 
-Only the latest release gets security fixes. AirStats updates itself
-through Sparkle, so a fix ships as a normal release.
+Only the latest release gets security fixes. ZStats does not run a background
+auto-updater; install the latest build from GitHub Releases or rebuild from source.
 
 ## Reporting a vulnerability
 
-Please don't open a public issue. Report it privately through
-[GitHub's security advisories](https://github.com/byrencheema/airstats/security/advisories/new)
-or by email to hello@airstats.app.
+Please don't open a public issue. Report it privately through GitHub's security
+advisories on this repository.
 
-Include the AirStats version, your macOS version, and steps to reproduce.
-I'll reply within a week, and I'll credit you in the release notes
-unless you'd rather not be named.
+Include the ZStats version, your macOS version, and steps to reproduce.
 
 ## Scope
 
-- The AirStats app and its source in this repository
-- The update feed at airstats.app/appcast.xml and its EdDSA signatures
-- The signed, notarized DMG on GitHub Releases
+- The ZStats app and its source in this repository
+- Signed, notarized DMG artifacts published on GitHub Releases

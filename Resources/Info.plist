@@ -5,17 +5,17 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>AirStats</string>
+	<string>ZStats</string>
 	<key>CFBundleExecutable</key>
-	<string>AirStats</string>
+	<string>ZStats</string>
 	<key>CFBundleIconFile</key>
 	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.airstat.AirStats</string>
+	<string>com.zstats.ZStats</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AirStats</string>
+	<string>ZStats</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,24 +29,14 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>AirStats reads connected Bluetooth peripherals to display their connection status and battery levels.</string>
+	<string>ZStats reads connected Bluetooth peripherals to display their connection status and battery levels.</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>AirStats</string>
+	<string>ZStats</string>
 	<key>NSSupportsAutomaticTermination</key>
 	<false/>
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
-	<key>SUAutomaticallyUpdate</key>
-	<true/>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
-	<key>SUFeedURL</key>
-	<string>https://airstats.app/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>Qhygt891m7jN7eTbSK4OKLjHwzU9HEOvRyJtSoib8kM=</string>
-	<key>SUScheduledCheckInterval</key>
-	<integer>604800</integer>
 </dict>
 </plist>

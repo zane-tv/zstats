@@ -4,16 +4,9 @@
 # ///
 """Measure what menu bar monitors cost while they sit there.
 
-    uv run Scripts/benchmark.py                      # AirStats against whatever else is running
-    uv run Scripts/benchmark.py --samples 160        # the count the write-up used
+    uv run Scripts/benchmark.py                      # ZStats against whatever else is running
+    uv run Scripts/benchmark.py --samples 160        # extended sample count
     uv run Scripts/benchmark.py --group Foo=Foo,Bar  # measure some other app
-
-This reproduces the method behind the numbers in the comparison write-up at
-https://airstats.app/blog/airstat-vs-stats-vs-istat-menus. It is not the
-transcript of that run: it will report what the apps on *your* Mac cost right now, and
-those figures will differ from the published ones because they depend on the hardware,
-the macOS version and what else the machine is doing. Reproducing the ranking is the
-point; reproducing the digits is not to be expected.
 
 Every app is measured by a single `top -l 2 -s 1` invocation per interval, which is the
 one thing here that cannot be varied without changing what the numbers mean:
@@ -43,7 +36,7 @@ import sys
 # process whose name matches any of its patterns. iStat Menus ships a status bar app and
 # a daemon, which is why its row in the write-up is labelled a suite.
 DEFAULT_GROUPS = {
-    "AirStats": ["AirStats"],
+    "ZStats": ["ZStats"],
     "Stats": ["Stats"],
     "iStat Menus (suite)": ["iStat Menus*", "iStatMenus*"],
 }
@@ -56,7 +49,7 @@ def find_pids(patterns):
 
     A pattern matches the whole process name, or its beginning when it ends in `*`.
     Substring matching is deliberately not offered: `Stats` occurs inside both
-    `systemstats` and `AirStats`, so a looser rule silently sums the app under test
+    `systemstats` and `ZStats`, so a looser rule silently sums the app under test
     into the app it is being compared against and reports the total as the rival's
     cost. The wildcard exists for suites whose helpers share a prefix, and for names
     long enough that `ps` truncates them.
